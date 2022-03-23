@@ -25,5 +25,8 @@ def extract_indeed_jobs(last_page):
   for page in range(last_page):
     result = requests.get(f"{URL}&start={page*LIMIT}")
     soup = BeautifulSoup(result.text,"html.parser")
+    results = soup.find_all("div", {"class":"singleLineTitle"})
+    for job in results:
+        jobs.append(job.string)
+    print(jobs)
 
-  return jobs    
