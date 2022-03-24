@@ -16,12 +16,14 @@ def extract_indeed_pages() :
   return max_page
 
 def extract_job(html):
+  location = html.select_one("div.companyLocation").string
+  print(location)
   job_span = html.find("h2",{"class":"jobTitle"}).find_all("span")
   for span in job_span:
         if span.string != "new":
           job_string = span.string
   company_string = html.find("span",{"class":"companyName"}).string
-  return {"company" : company_string, "job" : job_string }    
+  # return {"company" : company_string, "job" : job_string }    
 
 def extract_indeed_jobs(last_page):
   jobs = []
