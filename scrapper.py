@@ -1,18 +1,21 @@
+from flask import redirect
 import requests
 from bs4 import BeautifulSoup
 
 LIMIT = 50
-URL = f'https://www.indeed.com/jobs?q=python&limit={LIMIT} '
 
-def extract_indeed_pages() :
-  result = requests.get(URL)
+def extract_indeed_pages(url) :
+  result = requests.get(url)
   soup = BeautifulSoup(result.text,"html.parser")
   pagination = soup.find("div",{"class":"pagination"})
-  pages = pagination.find_all("a")
-  spans = []
-  for page in pages[:-1]:
-    spans.append(int(page.string))
-  max_page = spans[-1]
+  if pagination:
+    pages = pagination.find_all("a")
+    spans = []
+    for page in pages[:-1]:
+      spans.append(int(page.string))
+    max_page = spans[-1]
+  else:
+    max_page = 0
   return max_page
 
 def extract_job(html):
@@ -28,17 +31,23 @@ def extract_job(html):
   job_id = html["data-jk"]
   return {"company" : company_string, "job" : job_string , "location" : location_string, "link" :  f'https://www.indeed.com/viewjob?jk={job_id}'}
 
-def extract_indeed_jobs(last_page):
+def extract_indeed_jobs(last_page, url):
   jobs = []
-  job_count = 0
+  seq = 0
   for page in range(last_page):
     print(f"Scrapping page {page}")
-    result = requests.get(f"{URL}&start={page*LIMIT}")
+    result = requests.get(f"{url}&start={page*LIMIT}")
     soup = BeautifulSoup(result.text,"html.parser")
     results = soup.find_all("a", {"class":"tapItem"})
     for jobcard in results:
-      jobs.append(extract_job(jobcard))
-      job_count = job_count+1
-  print(f"Total JOB COUNT ... {job_count}")
+      seq = seq + 1
+      temp = extract_job(jobcard)
+      temp["seq"] = seq
+      jobs.append(temp)
   return jobs
 
+def get_jobs(keyword):
+    url = f'https://www.indeed.com/jobs?q={keyword}&limit={LIMIT} '
+    last_indeed_page = extract_indeed_pages(url)
+    indeed_jobs = extract_indeed_jobs(last_indeed_page, url)
+    return indeed_jobs
