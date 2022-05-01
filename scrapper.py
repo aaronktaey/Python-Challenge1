@@ -5,11 +5,11 @@ from bs4 import BeautifulSoup
 LIMIT = 50
 
 def extract_indeed_pages(url) :
-  result = requests.get(url)
-  soup = BeautifulSoup(result.text,"html.parser")
-  pagination = soup.find("div",{"class":"pagination"})
+  result = requests.get(url) # URL 로  GET 요청 보냄
+  soup = BeautifulSoup(result.text,"html.parser") # 응답 받은 HTML 을 text로 파싱함
+  pagination = soup.find("div",{"class":"pagination"}) # soup 에서 페이징 버튼을 찾아냄
   if pagination:
-    pages = pagination.find_all("a")
+    pages = pagination.find_all(["a","b"])
     spans = []
     for page in pages[:-1]:
       spans.append(int(page.string))
