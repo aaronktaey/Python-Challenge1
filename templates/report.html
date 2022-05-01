@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>Job Search</title>
     <style>
-        section{
-            display: grid;
-            gap: 10px;
-            grid-template-columns: repeat(5,1fr);
-        }
+      section {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(5, 1fr);
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Search Results</h1>
-    <h3>Found {{result_number}} jobs for :  {{keyword}}</h3>
+    <h3>Found {{result_number}} jobs for : {{keyword}}</h3>
     <a href="/export?keyword={{keyword}}">Download</a>
     <section>
-        <h4>No.</h4>
-        <h4>Title</h4>
-        <h4>Company</h4>
-        <h4>Location</h4>
-        <h4>Link</h4>
-        {% for job in jobs %}
-            <span>{{job.seq}}</span>
-            <span>{{job.job}}</span>
-            <span>{{job.company}}</span>
-            <span>{{job.location}}</span>
-            <a href="{{job.link}}" target="_blank">Apply</a>
-        {% endfor %}
+      <h4>No.</h4>
+      <h4>Title</h4>
+      <h4>Company</h4>
+      <h4>Location</h4>
+      <h4>Link</h4>
+      {% for job in jobs %}
+      <span>{{job.seq}}</span>
+      <span>{{job.job}}</span>
+      <span>{{job.company}}</span>
+      <span>{{job.location}}</span>
+      <a href="{{job.link}}" target="_blank">Apply</a>
+      {% endfor %}
     </section>
-</body>
+  </body>
 </html>

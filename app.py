@@ -1,18 +1,21 @@
 from flask import Flask, render_template, request, redirect, send_file
 from exporter import save_to_file
 from scrapper import get_jobs
- 
-app = Flask("SuperScrapper")
 
+# 플라스크 인스턴스 생성
+app = Flask("1") 
+
+# 검색결과를 담을 Dictionary 생성
 db={}
 
+# URL에 따른 라우팅 설정
+# 입력된 경로가 없으면 home.html 보여줌
 @app.route('/')
 def home():
-    return render_template("home.html")
+    return render_template("home.html") 
 
 @app.route('/<random_string>')
 def kimchi(random_string):
-    print(random_string)
     return redirect("/")
 
 @app.route('/report')
